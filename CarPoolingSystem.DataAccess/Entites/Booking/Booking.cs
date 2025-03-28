@@ -24,6 +24,9 @@ namespace CarPoolingSystem.DataAccess.Entites.Booking
         [ForeignKey("CustomerId")]
         public virtual User.User Customer { get; set; }
 
+        public int DirverId { get; set; }
+        [ForeignKey("DirverId")]
+        public virtual User.User Dirver { get; set; }
         public int SeatsBooked { get; set; }
 
         public Status Status { get; set; } 

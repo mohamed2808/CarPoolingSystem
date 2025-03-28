@@ -25,6 +25,69 @@ namespace CarPoolingSystem.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CarPoolingSystem.DataAccess.Entites.Booking.Booking", b =>
+                {
+                    b.Property<int>("BookingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingId"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DirverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RideId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeatsBooked")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookingId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("DirverId");
+
+                    b.HasIndex("RideId");
+
+                    b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("CarPoolingSystem.DataAccess.Entites.Payment.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("BookingId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("CarPoolingSystem.DataAccess.Entites.Ride.Ride", b =>
                 {
                     b.Property<int>("Id")
@@ -118,6 +181,44 @@ namespace CarPoolingSystem.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CarPoolingSystem.DataAccess.Entites.Booking.Booking", b =>
+                {
+                    b.HasOne("CarPoolingSystem.DataAccess.Entites.User.User", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CarPoolingSystem.DataAccess.Entites.User.User", "Dirver")
+                        .WithMany()
+                        .HasForeignKey("DirverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CarPoolingSystem.DataAccess.Entites.Ride.Ride", "Ride")
+                        .WithMany()
+                        .HasForeignKey("RideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Dirver");
+
+                    b.Navigation("Ride");
+                });
+
+            modelBuilder.Entity("CarPoolingSystem.DataAccess.Entites.Payment.Payment", b =>
+                {
+                    b.HasOne("CarPoolingSystem.DataAccess.Entites.Booking.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("CarPoolingSystem.DataAccess.Entites.Ride.Ride", b =>

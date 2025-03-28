@@ -16,7 +16,7 @@ namespace CarPoolingSystem.DataAccess.Entites.Payment
         public int BookingId { get; set; }
 
         [ForeignKey("BookingId")]
-        public Booking.Booking Booking { get; set; }
+        public virtual Booking.Booking Booking { get; set; }
 
         public decimal Amount { get; set; }
 
