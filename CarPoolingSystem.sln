@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35806.99 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarPoolingSystem.Presentation", "CarPoolingSystem.Presentation\CarPoolingSystem.Presentation.csproj", "{BE399FEC-20B7-4622-82B3-235DA9B6ACFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarPoolingSystem.BusinessLogic", "CarPoolingSystem.BusinessLogic\CarPoolingSystem.BusinessLogic.csproj", "{9AE65ABF-9B67-47A8-A209-E52919463394}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BE399FEC-20B7-4622-82B3-235DA9B6ACFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE399FEC-20B7-4622-82B3-235DA9B6ACFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE399FEC-20B7-4622-82B3-235DA9B6ACFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AE65ABF-9B67-47A8-A209-E52919463394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AE65ABF-9B67-47A8-A209-E52919463394}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AE65ABF-9B67-47A8-A209-E52919463394}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AE65ABF-9B67-47A8-A209-E52919463394}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
