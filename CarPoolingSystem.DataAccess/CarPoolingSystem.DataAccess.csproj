@@ -14,4 +14,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Entites\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Persistance\Data\Configurations\" />
+    <Folder Include="Persistance\Data\DbContext\" />
+    <Folder Include="Persistance\Data\UnitOfWork\" />
+    <Folder Include="Persistance\Repositories\" />
+  </ItemGroup>
+
 </Project>
