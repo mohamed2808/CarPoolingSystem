@@ -1,7 +1,12 @@
+using CarPoolingSystem.DataAccess.Persistance.Data.ApplicationDbContext;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<CarPoolingSystemDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CarPoolingSystemDbContext")));
+
 
 var app = builder.Build();
 
