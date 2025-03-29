@@ -16,11 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
     <Folder Include="Migrations\" />
     <Folder Include="Persistance\Data\Configurations\" />
     <Folder Include="Persistance\Data\UnitOfWork\" />
-    <Folder Include="Persistance\Repositories\" />
   </ItemGroup>
 
 </Project>

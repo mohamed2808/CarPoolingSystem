@@ -13,5 +13,6 @@ namespace CarPoolingSystem.DataAccess.Entites.User
         public string Role { get; set; } 
 
         public Rating Rating { get; set; }
+        public string? ProfilePicture { get; set; }
     }
 }
