@@ -1,4 +1,4 @@
-﻿using CarPoolingSystem.DataAccess.Interfaces;
+﻿using CarPoolingSystem.DataAccess.Interfaces.Repositories;
 using CarPoolingSystem.DataAccess.Persistance.Data.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;

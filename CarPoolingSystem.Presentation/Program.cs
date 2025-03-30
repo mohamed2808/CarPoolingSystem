@@ -1,11 +1,17 @@
+using CarPoolingSystem.BusinessLogic.Services;
+using CarPoolingSystem.BusinessLogic.Validations;
 using CarPoolingSystem.DataAccess.Entites.Booking;
 using CarPoolingSystem.DataAccess.Entites.Payment;
 using CarPoolingSystem.DataAccess.Entites.Ride;
 using CarPoolingSystem.DataAccess.Entites.User;
-using CarPoolingSystem.DataAccess.Interfaces;
+using CarPoolingSystem.DataAccess.Interfaces.Repositories;
+using CarPoolingSystem.DataAccess.Interfaces.Services;
+using CarPoolingSystem.DataAccess.Interfaces.UnitOfWork;
 using CarPoolingSystem.DataAccess.Persistance.Data.ApplicationDbContext;
 using CarPoolingSystem.DataAccess.Persistance.Data.UnitOfWork;
 using CarPoolingSystem.DataAccess.Persistance.Repositories;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +27,16 @@ builder.Services.AddScoped<IPaymentRepository,PaymentRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<IValidator<User>,UserValidator>();
+builder.Services.AddScoped<IValidator<Ride>, RideValidator>();
+builder.Services.AddScoped<IValidator<Booking>, BookingValidator>();
+builder.Services.AddScoped<IValidator<Payment>, PaymentValidator>();
+
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRideService, RideService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -2,7 +2,8 @@
 using CarPoolingSystem.DataAccess.Entites.Payment;
 using CarPoolingSystem.DataAccess.Entites.Ride;
 using CarPoolingSystem.DataAccess.Entites.User;
-using CarPoolingSystem.DataAccess.Interfaces;
+using CarPoolingSystem.DataAccess.Interfaces.Repositories;
+using CarPoolingSystem.DataAccess.Interfaces.UnitOfWork;
 using CarPoolingSystem.DataAccess.Persistance.Data.ApplicationDbContext;
 using CarPoolingSystem.DataAccess.Persistance.Repositories;
 using System;

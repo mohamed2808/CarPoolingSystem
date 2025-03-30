@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarPoolingSystem.DataAccess.Interfaces
+namespace CarPoolingSystem.DataAccess.Interfaces.Repositories
 {
     public interface IRideRepository : IGenericRepository<Ride>
     {
