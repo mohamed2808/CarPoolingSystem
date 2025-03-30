@@ -4,6 +4,7 @@ using CarPoolingSystem.DataAccess.Entites.Ride;
 using CarPoolingSystem.DataAccess.Entites.User;
 using CarPoolingSystem.DataAccess.Interfaces;
 using CarPoolingSystem.DataAccess.Persistance.Data.ApplicationDbContext;
+using CarPoolingSystem.DataAccess.Persistance.Data.UnitOfWork;
 using CarPoolingSystem.DataAccess.Persistance.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,8 @@ builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IBookingRepository,BookingRepository>();
 builder.Services.AddScoped<IRideRepository,RideRepository>();
 builder.Services.AddScoped<IPaymentRepository,PaymentRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
