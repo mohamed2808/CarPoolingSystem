@@ -1,15 +1,11 @@
-﻿using CarPoolingSystem.DataAccess.Entites.User;
-using CarPoolingSystem.DataAccess.Interfaces.Services;
+﻿using CarPoolingSystem.BusinessLogic.Models.UserDtos;
+using CarPoolingSystem.DataAccess.Entites.User;
 using CarPoolingSystem.DataAccess.Interfaces.UnitOfWork;
 using FluentValidation;
+using Mapster;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CarPoolingSystem.BusinessLogic.Services
+namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
 {
     public class UserService : IUserService
     {
@@ -29,19 +25,22 @@ namespace CarPoolingSystem.BusinessLogic.Services
             }
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserDetailsDTO>> GetAllUsersAsync()
         {
-            return await _unitOfWork.Users.GetAllAsync();
+            var users = await _unitOfWork.Users.GetAllAsync();
+            return users.Adapt<IEnumerable<UserDetailsDTO>>();
         }
 
-        public async Task<User?> GetUserByIdAsync(int id)
+        public async Task<UserDetailsDTO?> GetUserByIdAsync(int id)
         {
             if (id <= 0) throw new ArgumentException("Invalid user ID.");
-            return await _unitOfWork.Users.GetByIdAsync(id);
+            var user = await _unitOfWork.Users.GetByIdAsync(id);
+            return user?.Adapt<UserDetailsDTO>();
         }
 
-        public async Task AddUserAsync(User user)
+        public async Task AddUserAsync(CreateUserDTO userDto)
         {
+            var user = userDto.Adapt<User>();
             var validationResult = await _validator.ValidateAsync(user);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
@@ -52,9 +51,10 @@ namespace CarPoolingSystem.BusinessLogic.Services
             await _unitOfWork.Users.AddAsync(user);
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(UpdateUserDTO userDto)
         {
-            if (user.Id <= 0) throw new ArgumentException("Invalid user ID.");
+            if (userDto.Id <= 0) throw new ArgumentException("Invalid user ID.");
+            var user = userDto.Adapt<User>();
 
             var validationResult = await _validator.ValidateAsync(user);
             if (!validationResult.IsValid)
@@ -86,7 +86,7 @@ namespace CarPoolingSystem.BusinessLogic.Services
             if (file == null || file.Length == 0)
                 throw new Exception("No file uploaded.");
 
-            if (!String.IsNullOrEmpty(file.FileName))
+            if (!string.IsNullOrEmpty(file.FileName))
             {
                 string oldImagePath = Path.Combine(_uploadPath, Path.GetFileName(user.Result.ProfilePicture!));
                 if (File.Exists(oldImagePath))

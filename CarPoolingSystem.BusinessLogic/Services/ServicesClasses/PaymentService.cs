@@ -1,14 +1,11 @@
-﻿using CarPoolingSystem.DataAccess.Entites.Payment;
-using CarPoolingSystem.DataAccess.Interfaces.Services;
+﻿using CarPoolingSystem.BusinessLogic.Models.PaymentDtos;
+using CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces;
+using CarPoolingSystem.DataAccess.Entites.Payment;
 using CarPoolingSystem.DataAccess.Interfaces.UnitOfWork;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mapster;
 
-namespace CarPoolingSystem.BusinessLogic.Services
+namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
 {
     public class PaymentService : IPaymentService
     {
@@ -21,19 +18,22 @@ namespace CarPoolingSystem.BusinessLogic.Services
             _validator = validator;
         }
 
-        public async Task<IEnumerable<Payment>> GetAllPaymentsAsync()
+        public async Task<IEnumerable<PaymentDTO>> GetAllPaymentsAsync()
         {
-            return await _unitOfWork.Payments.GetAllAsync();
+            var payments =  await _unitOfWork.Payments.GetAllAsync();
+            return payments.Adapt<IEnumerable<PaymentDTO>>();
         }
 
-        public async Task<Payment?> GetPaymentByIdAsync(int id)
+        public async Task<PaymentDTO?> GetPaymentByIdAsync(int id)
         {
             if (id <= 0) throw new ArgumentException("Invalid payment ID.");
-            return await _unitOfWork.Payments.GetByIdAsync(id);
+            var payment = await _unitOfWork.Payments.GetByIdAsync(id);
+            return payment.Adapt<PaymentDTO>();
         }
 
-        public async Task AddPaymentAsync(Payment payment)
+        public async Task AddPaymentAsync(CreatePaymentDTO paymentDto)
         {
+            var payment = paymentDto.Adapt<Payment>();
             var validationResult = await _validator.ValidateAsync(payment);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
@@ -44,8 +44,9 @@ namespace CarPoolingSystem.BusinessLogic.Services
             await _unitOfWork.Payments.AddAsync(payment);
         }
 
-        public async Task UpdatePaymentAsync(Payment payment)
+        public async Task UpdatePaymentAsync(UpdatePaymentDTO paymentDto)
         {
+            var payment = paymentDto.Adapt<Payment>();
             if (payment.PaymentId <= 0) throw new ArgumentException("Invalid payment ID.");
 
             var validationResult = await _validator.ValidateAsync(payment);

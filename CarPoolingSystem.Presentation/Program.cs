@@ -1,17 +1,16 @@
-using CarPoolingSystem.BusinessLogic.Services;
+using CarPoolingSystem.BusinessLogic.Services.ServicesClasses;
+using CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces;
 using CarPoolingSystem.BusinessLogic.Validations;
 using CarPoolingSystem.DataAccess.Entites.Booking;
 using CarPoolingSystem.DataAccess.Entites.Payment;
 using CarPoolingSystem.DataAccess.Entites.Ride;
 using CarPoolingSystem.DataAccess.Entites.User;
 using CarPoolingSystem.DataAccess.Interfaces.Repositories;
-using CarPoolingSystem.DataAccess.Interfaces.Services;
 using CarPoolingSystem.DataAccess.Interfaces.UnitOfWork;
 using CarPoolingSystem.DataAccess.Persistance.Data.ApplicationDbContext;
 using CarPoolingSystem.DataAccess.Persistance.Data.UnitOfWork;
 using CarPoolingSystem.DataAccess.Persistance.Repositories;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

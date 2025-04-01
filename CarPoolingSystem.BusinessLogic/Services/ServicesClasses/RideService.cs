@@ -1,14 +1,11 @@
-﻿using CarPoolingSystem.DataAccess.Entites.Ride;
-using CarPoolingSystem.DataAccess.Interfaces.Services;
+﻿using CarPoolingSystem.BusinessLogic.Models.RideDtos;
+using CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces;
+using CarPoolingSystem.DataAccess.Entites.Ride;
 using CarPoolingSystem.DataAccess.Interfaces.UnitOfWork;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mapster;
 
-namespace CarPoolingSystem.BusinessLogic.Services
+namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
 {
     public class RideService : IRideService
     {
@@ -21,19 +18,22 @@ namespace CarPoolingSystem.BusinessLogic.Services
             _validator = validator;
         }
 
-        public async Task<IEnumerable<Ride>> GetAllRidesAsync()
+        public async Task<IEnumerable<RideDetailsDTO>> GetAllRidesAsync()
         {
-            return await _unitOfWork.Rides.GetAllAsync();
+            var rides =  await _unitOfWork.Rides.GetAllAsync();
+            return rides.Adapt<IEnumerable<RideDetailsDTO>>();
         }
 
-        public async Task<Ride?> GetRideByIdAsync(int id)
+        public async Task<RideDetailsDTO?> GetRideByIdAsync(int id)
         {
             if (id <= 0) throw new ArgumentException("Invalid ride ID.");
-            return await _unitOfWork.Rides.GetByIdAsync(id);
+            var ride = await _unitOfWork.Rides.GetByIdAsync(id);
+            return ride?.Adapt<RideDetailsDTO>();
         }
 
-        public async Task AddRideAsync(Ride ride)
+        public async Task AddRideAsync(CreateRideDTO rideDto)
         {
+            var ride = rideDto.Adapt<Ride>();
             var validationResult = await _validator.ValidateAsync(ride);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
@@ -41,9 +41,10 @@ namespace CarPoolingSystem.BusinessLogic.Services
             await _unitOfWork.Rides.AddAsync(ride);
         }
 
-        public async Task UpdateRideAsync(Ride ride)
+        public async Task UpdateRideAsync(UpdateRideDTO rideDto)
         {
-            if (ride.Id <= 0) throw new ArgumentException("Invalid ride ID.");
+            if (rideDto.Id <= 0) throw new ArgumentException("Invalid ride ID.");
+            var ride = rideDto.Adapt<Ride>();
 
             var validationResult = await _validator.ValidateAsync(ride);
             if (!validationResult.IsValid)

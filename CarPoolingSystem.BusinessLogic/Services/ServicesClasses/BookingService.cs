@@ -1,14 +1,11 @@
-﻿using CarPoolingSystem.DataAccess.Entites.Booking;
-using CarPoolingSystem.DataAccess.Interfaces.Services;
+﻿using CarPoolingSystem.BusinessLogic.Models.BookingDtos;
+using CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces;
+using CarPoolingSystem.DataAccess.Entites.Booking;
 using CarPoolingSystem.DataAccess.Interfaces.UnitOfWork;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mapster;
 
-namespace CarPoolingSystem.BusinessLogic.Services
+namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
 {
     public class BookingService : IBookingService
     {
@@ -21,19 +18,22 @@ namespace CarPoolingSystem.BusinessLogic.Services
             _validator = validator;
         }
 
-        public async Task<IEnumerable<Booking>> GetAllBookingsAsync()
+        public async Task<IEnumerable<BookingDetailsDTO>> GetAllBookingsAsync()
         {
-            return await _unitOfWork.Bookings.GetAllAsync();
+            var bookings = await _unitOfWork.Bookings.GetAllAsync();
+            return bookings.Adapt<IEnumerable<BookingDetailsDTO>>();
         }
 
-        public async Task<Booking?> GetBookingByIdAsync(int id)
+        public async Task<BookingDetailsDTO?> GetBookingByIdAsync(int id)
         {
             if (id <= 0) throw new ArgumentException("Invalid booking ID.");
-            return await _unitOfWork.Bookings.GetByIdAsync(id);
+            var booking = await _unitOfWork.Bookings.GetByIdAsync(id);
+            return booking.Adapt<BookingDetailsDTO>();
         }
 
-        public async Task AddBookingAsync(Booking booking)
+        public async Task AddBookingAsync(CreateBookingDTO bookingDto)
         {
+            var booking = bookingDto.Adapt<Booking>();
             var validationResult = await _validator.ValidateAsync(booking);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
@@ -48,8 +48,9 @@ namespace CarPoolingSystem.BusinessLogic.Services
             await _unitOfWork.Bookings.AddAsync(booking);
         }
 
-        public async Task UpdateBookingAsync(Booking booking)
+        public async Task UpdateBookingAsync(UpdateBookingDTO bookingDto)
         {
+            var booking = bookingDto.Adapt<Booking>();
             if (booking.CustomerId <= 0) throw new ArgumentException("Invalid booking ID.");
 
             var validationResult = await _validator.ValidateAsync(booking);
