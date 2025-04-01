@@ -18,6 +18,12 @@ namespace CarPoolingSystem.Presentation.Controllers
             var bookings = await _bookingService.GetAllBookingsAsync();
             return View(bookings);
         }
+        public async Task<IActionResult> Details(int id)
+        {
+            var booking = await _bookingService.GetBookingByIdAsync(id);
+            if (booking == null) return NotFound();
+            return View(booking);
+        }
 
         public IActionResult Create()
         {
