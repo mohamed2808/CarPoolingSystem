@@ -1,6 +1,6 @@
 using CarPoolingSystem.BusinessLogic.Services.ServicesClasses;
 using CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces;
-using CarPoolingSystem.BusinessLogic.Validations;
+using CarPoolingSystem.BusinessLogic.Validations.Entities;
 using CarPoolingSystem.DataAccess.Entites.Booking;
 using CarPoolingSystem.DataAccess.Entites.Payment;
 using CarPoolingSystem.DataAccess.Entites.Ride;

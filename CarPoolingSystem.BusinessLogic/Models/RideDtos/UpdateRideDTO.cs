@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace CarPoolingSystem.BusinessLogic.Models.RideDtos
 {
-    public record UpdateRideDTO(int Id, int SeatsAvailable, decimal Price);
+    public record UpdateRideDTO(int Id, int SeatsAvailable, decimal Price,DateTime DateTime);
 }

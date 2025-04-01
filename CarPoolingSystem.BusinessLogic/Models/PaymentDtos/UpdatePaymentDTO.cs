@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace CarPoolingSystem.BusinessLogic.Models.PaymentDtos
 {
-    public record UpdatePaymentDTO(int Id, Status Status);
+    public record UpdatePaymentDTO(int Id,decimal Amount, Status Status);
 }

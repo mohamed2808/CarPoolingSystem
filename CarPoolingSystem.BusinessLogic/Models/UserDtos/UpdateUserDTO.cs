@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace CarPoolingSystem.BusinessLogic.Models.UserDtos
 {
-    public record UpdateUserDTO(int Id, string FullName, string PhoneNumber);
+    public record UpdateUserDTO(int Id, string FullName, string PhoneNumber,string Email,string Role);
 }

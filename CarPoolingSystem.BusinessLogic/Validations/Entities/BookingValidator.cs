@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarPoolingSystem.BusinessLogic.Validations
+namespace CarPoolingSystem.BusinessLogic.Validations.Entities
 {
     public class BookingValidator : AbstractValidator<Booking>
     {

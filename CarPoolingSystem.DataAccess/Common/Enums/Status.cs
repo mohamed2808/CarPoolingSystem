@@ -10,6 +10,8 @@ namespace CarPoolingSystem.DataAccess.Common.Enums
     {
         Pending,
         Confirmed,
-        Completed
+        Completed,
+        Cancelled,
+        Failed
     }
 }

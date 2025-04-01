@@ -23,5 +23,5 @@ namespace CarPoolingSystem.DataAccess.Entites.Payment
         public string PaymentMethod { get; set; } // "Cash", "Card"
 
         public string Status { get; set; } // "Paid", "Pending"
-    }
+    }   
 }
