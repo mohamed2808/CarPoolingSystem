@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CarPoolingSystem.Presentation.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarPoolingSystem.Presentation.Controllers;
 
@@ -19,6 +20,11 @@ public class HomeController : Controller
     }
 
     public IActionResult Privacy()
+    {
+        return View();
+    }
+    [Authorize(Roles = "Admin")]
+    public IActionResult AdminPanel()
     {
         return View();
     }

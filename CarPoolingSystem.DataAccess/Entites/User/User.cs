@@ -1,6 +1,8 @@
 ﻿using CarPoolingSystem.DataAccess.Common.Entities;
 using CarPoolingSystem.DataAccess.Common.Enums;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 namespace CarPoolingSystem.DataAccess.Entites.User
 {
     public class User : BaseAuditableEntity<int>

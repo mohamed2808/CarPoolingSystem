@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container mt-4">
+    <h2>Find a Ride</h2>
+    <form>
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="From">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="To">
+            </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Driver</th>
+                <th>Route</th>
+                <th>Departure Time</th>
+                <th>Seats</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ahmed Ali</td>
+                <td>Aswan → Cairo</td>
+                <td>10:00 AM</td>
+                <td>2</td>
+                <td><button class="btn btn-success">Book Now</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+

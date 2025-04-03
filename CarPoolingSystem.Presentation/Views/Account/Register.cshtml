@@ -1,0 +1,79 @@
+﻿@model CarPoolingSystem.BusinessLogic.Models.ApplicationUserDtos.RegisterDTO
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Register</h2>
+            <form method="post" action="@Url.Action("Register", "Account")">
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="FullName" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="Email" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="Phone" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" name="Role" id="roleSelect">
+                        <option value="Passenger">Passenger</option>
+                        <option value="Driver">Driver</option>
+                    </select>
+                </div>
+
+                <!-- Vehicle Details for Drivers -->
+                <div id="vehicleDetails" style="display: none;">
+                    <div class="mb-3">
+                        <label class="form-label">Vehicle Make</label>
+                        <input type="text" class="form-control" name="VehicleMake">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Vehicle Model</label>
+                        <input type="text" class="form-control" name="VehicleModel">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">License Plate</label>
+                        <input type="text" class="form-control" name="LicensePlate">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Number of Seats</label>
+                        <input type="number" class="form-control" name="Seats">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="Password" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" name="ConfirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Register</button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="@Url.Action("Login", "Account")">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("roleSelect").addEventListener("change", function () {
+        var vehicleDetails = document.getElementById("vehicleDetails");
+        if (this.value === "Driver") {
+            vehicleDetails.style.display = "block";
+        } else {
+            vehicleDetails.style.display = "none";
+        }
+    });
+</script>
+
