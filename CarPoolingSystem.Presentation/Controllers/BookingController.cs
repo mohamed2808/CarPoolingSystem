@@ -41,12 +41,6 @@ namespace CarPoolingSystem.Presentation.Controllers
             return View(model);
         }
 
-       
-
-        public IActionResult Create()
-        {
-            return View();
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

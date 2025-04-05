@@ -69,6 +69,6 @@ public class AccountController : Controller
     [AllowAnonymous]
     public IActionResult AccessDenied()
     {
-        return View(); // Return the Access Denied view
+        return View(); 
     }
 }

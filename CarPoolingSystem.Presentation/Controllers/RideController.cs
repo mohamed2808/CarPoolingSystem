@@ -43,8 +43,7 @@ namespace CarPoolingSystem.Presentation.Controllers
         {
             return View("OfferRide", ride);
         }
-        [Authorize(Roles = "Admin,Driver")]
-        [ValidateAntiForgeryToken]
+
         [HttpPost("ride/offer")]
         public async Task<IActionResult> OfferRide(CreateRideDTO ride)
         {
@@ -57,16 +56,6 @@ namespace CarPoolingSystem.Presentation.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var ride = await _rideService.GetRideByIdAsync(id);
-            if (ride == null)
-            {
-                return NotFound();
-            }
-            return View(ride);
-        }
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateRideDTO ride)
         {
