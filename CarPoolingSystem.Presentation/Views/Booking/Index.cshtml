@@ -1,97 +1,205 @@
 ﻿@model IEnumerable<CarPoolingSystem.Presentation.Models.BookingViewModel>
 
 @{
-    ViewData["Title"] = "Bookings";
+    ViewData["Title"] = "My Bookings";
 }
 
 <div class="container mt-5">
-    <h2 class="text-center text-primary">My Bookings</h2>
+    <div class="text-center">
+        <h2>My Bookings</h2>
+        <p>Review or manage your current ride bookings</p>
+    </div>
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="table-responsive mt-4">
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Ride</th>
-                        <th>Driver</th>
-                        <th>Origin</th>
-                        <th>Destination</th>
-                        <th>Date & Time</th>
-                        <th>Seats Booked</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var booking in Model)
-                    {
-                        <tr>
-                            <td>@booking.RideId</td>
-                            <td>@booking.DriverName</td>
-                            <td>@booking.Origin</td>
-                            <td>@booking.Destination</td>
-                            <td>@booking.DateTime.ToString("yyyy-MM-dd HH:mm")</td>
-                            <td>@booking.SeatsBooked</td>
-                            <td>$@booking.Price</td>
-                            <td>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteMode">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                        </tr>
+    <div class="row mt-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var booking in Model)
+            {
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">@booking.Origin → @booking.Destination</h5>
+                            <p class="card-text">
+                                <strong>Date:</strong> @booking.DateTime.ToString("yyyy-MM-dd HH:mm") <br />
+                                <strong>Seats Booked:</strong> @booking.SeatsBooked <br />
+                                <strong>Total Price:</strong> @booking.Price.ToString("C")
+                            </p>
 
-                        <div class="modal fade" id="deleteMode" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Delete Department</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Are You Sure Delete Department</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form asp-action="Cancel" asp-route-id="@booking.Id">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" value="Delete" class="btn btn-danger" />
-                                        </form>
+                            <button type="button" class="btn btn-primary w-100 mt-2 viewBookingBtn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#bookingDetailsModal"
+                                    data-id="@booking.BookingId"
+                                    data-origin="@booking.Origin"
+                                    data-destination="@booking.Destination"
+                                    data-datetime="@booking.DateTime"
+                                    data-seats="@booking.SeatsBooked"
+                                    data-price="@booking.Price">
+                                Details
+                            </button>
 
-                                    </div>
-                                </div>
-                            </div>
+                            <button class="btn btn-warning w-100 mt-2 editBookingBtn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editBookingModal"
+                                    data-id="@booking.BookingId"
+                                    data-rideid="@booking.RideId"
+                                    data-driver="@booking.DriverName"
+                                    data-origin="@booking.Origin"
+                                    data-destination="@booking.Destination"
+                                    data-datetime="@booking.DateTime.ToString("yyyy-MM-ddTHH:mm")"
+                                    data-price="@booking.Price"
+                                    data-seats="@booking.SeatsBooked">
+                                Edit
+                            </button>
+
+                            <button type="button" class="btn btn-danger w-100 mt-2 deleteBookingBtn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteBookingModal"
+                                    data-id="@booking.BookingId"
+                                    data-origin="@booking.Origin"
+                                    data-destination="@booking.Destination">
+                                Delete
+                            </button>
                         </div>
-                       
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-    else
-    {
-        <h4 class="text-center mt-4 text-warning">No bookings found.</h4>
-    }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <h4>No bookings found.</h4>
+            </div>
+        }
+    </div>
 </div>
 
-<!-- Cancel Modal -->
+<!-- Booking Details Modal -->
+<div class="modal fade" id="bookingDetailsModal" tabindex="-1" aria-labelledby="bookingDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingDetailsModalLabel">Booking Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Origin:</strong> <span id="bookingOrigin"></span></p>
+                <p><strong>Destination:</strong> <span id="bookingDestination"></span></p>
+                <p><strong>Date:</strong> <span id="bookingDateTime"></span></p>
+                <p><strong>Seats Booked:</strong> <span id="bookingSeats"></span></p>
+                <p><strong>Total Price:</strong> <span id="bookingTotalPrice"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Edit Booking Modal -->
+<div class="modal fade" id="editBookingModal" tabindex="-1" aria-labelledby="editBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="@Url.Action("Edit", "Booking")">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editBookingModalLabel">Edit Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" name="BookingId" id="editBookingId" />
+                    <input type="hidden" name="RideId" id="editRideId" />
+
+                    <div class="mb-3">
+                        <label>Driver:</label>
+                        <input type="text" name="DriverName" id="editDriverName" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label>From:</label>
+                        <input type="text" name="Origin" id="editOrigin" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label>To:</label>
+                        <input type="text" name="Destination" id="editDestination" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label>Date & Time:</label>
+                        <input type="text" name="DateTime" id="editDateTime" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label>Price:</label>
+                        <input type="text" name="Price" id="editPrice" class="form-control" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label>Seats Booked:</label>
+                        <input type="number" name="SeatsBooked" id="editSeatsBooked" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Booking Modal -->
+<div class="modal fade" id="deleteBookingModal" tabindex="-1" aria-labelledby="deleteBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteBookingModalLabel">Delete Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this booking?</p>
+                <p><strong>Origin:</strong> <span id="deleteBookingOrigin"></span></p>
+                <p><strong>Destination:</strong> <span id="deleteBookingDestination"></span></p>
+
+                <form method="post" action="@Url.Action("Delete", "Booking")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="deleteBookingId" name="bookingId" />
+                    <button type="submit" class="btn btn-danger w-100">Cancel Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var cancelModal = document.getElementById("cancelModal");
+            // Details button
+            document.querySelectorAll(".viewBookingBtn").forEach(button => {
+                button.addEventListener("click", function () {
+                    document.getElementById("bookingOrigin").innerText = this.dataset.origin;
+                    document.getElementById("bookingDestination").innerText = this.dataset.destination;
+                    document.getElementById("bookingDateTime").innerText = this.dataset.datetime;
+                    document.getElementById("bookingSeats").innerText = this.dataset.seats;
+                    document.getElementById("bookingTotalPrice").innerText = this.dataset.price;
+                });
+            });
 
-            cancelModal.addEventListener("show.bs.modal", function (event) {
-                var button = event.relatedTarget; // The button that triggered the modal
-                var bookingId = button.getAttribute("data-id"); // Get booking ID
+            // Delete button
+            document.querySelectorAll(".deleteBookingBtn").forEach(button => {
+                button.addEventListener("click", function () {
+                    document.getElementById("deleteBookingOrigin").innerText = this.dataset.origin;
+                    document.getElementById("deleteBookingDestination").innerText = this.dataset.destination;
+                    document.getElementById("deleteBookingId").value = this.dataset.id;
+                });
+            });
 
-                console.log("Booking ID Passed:", bookingId); // Debugging
-
-                // Set the bookingId to the hidden input field
-                if (bookingId) {
-                    document.getElementById("bookingId").value = bookingId; // Set hidden input value
-                } else {
-                    console.log("No booking ID found!");
-                }
+            // Edit button
+            document.querySelectorAll(".editBookingBtn").forEach(button => {
+                button.addEventListener("click", function () {
+                    document.getElementById("editBookingId").value = this.dataset.id;
+                    document.getElementById("editRideId").value = this.dataset.rideid;
+                    document.getElementById("editDriverName").value = this.dataset.driver;
+                    document.getElementById("editOrigin").value = this.dataset.origin;
+                    document.getElementById("editDestination").value = this.dataset.destination;
+                    document.getElementById("editDateTime").value = this.dataset.datetime;
+                    document.getElementById("editPrice").value = this.dataset.price;
+                    document.getElementById("editSeatsBooked").value = this.dataset.seats;
+                });
             });
         });
     </script>

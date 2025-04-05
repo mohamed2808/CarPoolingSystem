@@ -5,6 +5,7 @@ using CarPoolingSystem.DataAccess.Entites.Ride;
 using CarPoolingSystem.Presentation.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolingSystem.Presentation.Controllers
 {
@@ -23,13 +24,13 @@ namespace CarPoolingSystem.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             var bookings = await _bookingService.GetAllBookingsAsync();
-            var listOfBookings = bookings.ToList();
+            
 
-            var model = listOfBookings.Select(b => new BookingViewModel
+            var model = bookings.Select(b => new BookingViewModel
             {
-                Id = b.Id,
+                BookingId = b.BookingId,
                 RideId = b.RideId,
-                DriverName = b.Driver == null ? "mohamed" : b.Driver.Name ,
+                DriverName = b.Driver == null ? "Mohamed" : b.Driver.Name ,
                 Origin = b.Ride.Origin,
                 Destination = b.Ride.Destination,
                 DateTime = b.Ride.DateTime,
@@ -74,54 +75,24 @@ namespace CarPoolingSystem.Presentation.Controllers
             return RedirectToAction("Index");
         }
 
-       
-    
-        public async Task<IActionResult> Edit(int? id)
-        {
-           if(!id.HasValue) return BadRequest();
-           var booking = await _bookingService.GetBookingByIdAsync(id.Value);
-            if (booking == null) return NotFound();
-            else
-            {
-                booking.Adapt<UpdateBookingDTO>();
-            }
-            TempData["Id"] = id.Value;
-            return View(booking);
-        }
+
+
 
         [HttpPost]
-        public async Task<IActionResult> Edit([FromRoute] int id, UpdateBookingDTO booking)
+        public async Task<IActionResult> Edit(BookingViewModel model)
         {
-            if (((int?)TempData["Id"]) != id)
-            {
-                return BadRequest();
-            }
             if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("Id", "Invalid Id");
-                return BadRequest(ModelState);
-            }
+                return BadRequest();
+            var booking = model.Adapt<UpdateBookingDTO>();
 
-            var message = "Booking Updated Successfully";
-            try
-            {
-                var updateBookingDto = booking.Adapt<UpdateBookingDTO>();
-                var udpated = await _bookingService.UpdateBookingAsync(updateBookingDto) > 0;
-                if (!udpated)
-                {
-                    message = "Failed to update department";
-                }
-            }
-            catch (Exception ex)
-            {
-                message = "Failed to update department";
-            }
-            return View(booking);
+            await _bookingService.UpdateBookingAsync(booking);
+
+            return RedirectToAction(nameof(Index));
         }
 
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Cancel(int bookingId)
+        public async Task<IActionResult> Delete(int bookingId)
         {
             var result = await _bookingService.DeleteBookingAsync(bookingId);
 

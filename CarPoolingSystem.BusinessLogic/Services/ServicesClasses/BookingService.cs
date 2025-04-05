@@ -55,15 +55,17 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
 
         public async Task<int> UpdateBookingAsync(UpdateBookingDTO bookingDto)
         {
-            var booking = bookingDto.Adapt<Booking>();
-            if (booking.CustomerId <= 0) throw new ArgumentException("Invalid booking ID.");
+            if (bookingDto.BookingId <= 0) throw new ArgumentException("Invalid booking ID.");
 
-            var validationResult = await _validator.ValidateAsync(booking);
+            var booking = await _unitOfWork.Bookings.GetByIdAsync(bookingDto.BookingId);
+            booking.SeatsBooked = bookingDto.SeatsBooked;
+            if(booking is null) throw new Exception("Ride not found.");
+
+
+            var validationResult = await _validator.ValidateAsync(bookingDto.Adapt<Booking>());
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(booking.CustomerId);
-            if (existingBooking == null) throw new Exception("Booking not found.");
 
             await _unitOfWork.Bookings.UpdateAsync(booking);
            return await _unitOfWork.SaveAsync() ;
@@ -78,6 +80,7 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
             if (booking == null) throw new Exception("Booking not found.");
 
             await _unitOfWork.Bookings.DeleteAsync(booking);
+            await _unitOfWork.SaveAsync();
             return true;
         }
     }

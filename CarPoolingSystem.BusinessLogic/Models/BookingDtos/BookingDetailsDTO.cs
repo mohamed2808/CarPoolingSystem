@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace CarPoolingSystem.BusinessLogic.Models.BookingDtos
 {
-    public record BookingDetailsDTO(int Id, int RideId, User? Driver, Ride Ride,int SeatsBooked);
+    public record BookingDetailsDTO(int BookingId, int RideId, User? Driver, Ride Ride,int SeatsBooked);
 }
