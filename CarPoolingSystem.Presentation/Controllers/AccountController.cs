@@ -1,5 +1,6 @@
 ﻿using CarPoolingSystem.BusinessLogic.Models.ApplicationUserDtos;
 using CarPoolingSystem.BusinessLogic.Services.Autho;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 public class AccountController : Controller
@@ -64,5 +65,10 @@ public class AccountController : Controller
     {
         await _authService.LogoutAsync();
         return RedirectToAction("Login");
+    }
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        return View(); // Return the Access Denied view
     }
 }

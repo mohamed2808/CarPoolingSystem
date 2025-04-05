@@ -15,9 +15,6 @@ namespace CarPoolingSystem.BusinessLogic.Validations.Dtos.Booking
             RuleFor(b => b.RideId)
                 .GreaterThan(0).WithMessage("Ride ID must be a positive number.");
 
-            RuleFor(b => b.UserId)
-                .GreaterThan(0).WithMessage("User ID must be a positive number.");
-
             RuleFor(b => b.SeatsBooked)
                 .InclusiveBetween(1, 10).WithMessage("Seats booked must be between 1 and 10.");
         }

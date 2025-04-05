@@ -23,7 +23,13 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
             var rides =  await _unitOfWork.Rides.GetAllAsync();
             return rides.Adapt<IEnumerable<RideDetailsDTO>>();
         }
-
+        public async Task<IEnumerable<RideDetailsDTO>> SearchAboutRide(SearchRideDTO rideDto)
+        {
+           if (rideDto == null) {throw new ArgumentNullException(nameof(rideDto));}
+           var rides = await _unitOfWork.Rides.GetAllAsync();
+            var filteredRides = rides.Where(r => r.Origin.Equals(rideDto.Origin, StringComparison.CurrentCultureIgnoreCase) && r.Destination.Equals(rideDto.Destination,StringComparison.OrdinalIgnoreCase) && r.DateTime.Equals(rideDto.DateTime)).ToList();
+            return filteredRides.Adapt<IEnumerable<RideDetailsDTO>>();
+        }
         public async Task<RideDetailsDTO?> GetRideByIdAsync(int id)
         {
             if (id <= 0) throw new ArgumentException("Invalid ride ID.");
@@ -34,6 +40,10 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
         public async Task AddRideAsync(CreateRideDTO rideDto)
         {
             var ride = rideDto.Adapt<Ride>();
+            ride.CreatedOn = DateTime.Now.AddMinutes(5);
+            ride.CreatedBy = "Dirver";
+            ride.LastModifiedBy = "Driver";
+            ride.DriverId = 2;
             var validationResult = await _validator.ValidateAsync(ride);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
@@ -44,16 +54,19 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
         public async Task UpdateRideAsync(UpdateRideDTO rideDto)
         {
             if (rideDto.Id <= 0) throw new ArgumentException("Invalid ride ID.");
-            var ride = rideDto.Adapt<Ride>();
 
-            var validationResult = await _validator.ValidateAsync(ride);
+            var existingRide = await _unitOfWork.Rides.GetByIdAsync(rideDto.Id);
+            existingRide.Origin = rideDto.Origin;
+            existingRide.Destination = rideDto.Destination;
+            existingRide.DateTime = rideDto.DateTime;
+            existingRide.SeatsAvailable = rideDto.SeatsAvailable;
+            existingRide.Price = rideDto.Price;
+            if (existingRide == null) throw new Exception("Ride not found.");
+            var validationResult = await _validator.ValidateAsync(rideDto.Adapt<Ride>());
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
-
-            var existingRide = await _unitOfWork.Rides.GetByIdAsync(ride.Id);
-            if (existingRide == null) throw new Exception("Ride not found.");
-
-            await _unitOfWork.Rides.UpdateAsync(ride);
+            await _unitOfWork.Rides.UpdateAsync(existingRide);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task DeleteRideAsync(int id)
@@ -64,6 +77,7 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
             if (ride == null) throw new Exception("Ride not found.");
 
             await _unitOfWork.Rides.DeleteAsync(ride);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

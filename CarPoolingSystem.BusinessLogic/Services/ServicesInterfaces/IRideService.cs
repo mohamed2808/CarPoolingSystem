@@ -12,6 +12,7 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces
     public interface IRideService
     {
         Task<IEnumerable<RideDetailsDTO>> GetAllRidesAsync();
+        Task<IEnumerable<RideDetailsDTO>> SearchAboutRide(SearchRideDTO rideDTO);
         Task<RideDetailsDTO?> GetRideByIdAsync(int id);
         Task AddRideAsync(CreateRideDTO Ride);
         Task UpdateRideAsync(UpdateRideDTO Ride);

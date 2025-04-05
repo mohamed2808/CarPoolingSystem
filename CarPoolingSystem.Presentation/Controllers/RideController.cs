@@ -1,5 +1,8 @@
-﻿using CarPoolingSystem.BusinessLogic.Models.RideDtos;
+﻿using CarPoolingSystem.BusinessLogic.Models.BookingDtos;
+using CarPoolingSystem.BusinessLogic.Models.RideDtos;
 using CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces;
+using CarPoolingSystem.Presentation.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -14,35 +17,46 @@ namespace CarPoolingSystem.Presentation.Controllers
             _rideService = rideService;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new RideSearchViewModel();
+            model.Rides = await _rideService.GetAllRidesAsync();
+            return View(model);
         }
-        [HttpGet]
-        public IActionResult Details(int id)
-        {
-            var ride = _rideService.GetRideByIdAsync(id);
-            if (ride == null)
-            {
-                return NotFound();
-            }
-            return View(ride);
-        }
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
+
         [HttpPost]
-        public async Task<IActionResult> Create(CreateRideDTO ride)
+        public async Task<IActionResult> Index(RideSearchViewModel model)
         {
+
             if (ModelState.IsValid)
             {
-                await _rideService.AddRideAsync(ride);
-                return RedirectToAction("Index");
+                var rides = await _rideService.SearchAboutRide(new SearchRideDTO(model.Origin, model.Destination, model.DateTime));
+
+
+                model.Rides = rides;
+
             }
-            return View(ride);
+            return View(model);
         }
+        [HttpGet("ride/offer")]
+        public IActionResult GetOfferRide(CreateRideDTO ride)
+        {
+            return View("OfferRide", ride);
+        }
+        [Authorize(Roles = "Admin,Driver")]
+        [ValidateAntiForgeryToken]
+        [HttpPost("ride/offer")]
+        public async Task<IActionResult> OfferRide(CreateRideDTO ride)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ride);
+            }
+
+            await _rideService.AddRideAsync(ride);
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -63,21 +77,11 @@ namespace CarPoolingSystem.Presentation.Controllers
             }
             return View(ride);
         }
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var ride = await _rideService.GetRideByIdAsync(id);
-            if (ride == null)
-            {
-                return NotFound();
-            }
-            return View(ride);
-        }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int ride)
-        {
-            await _rideService.DeleteRideAsync(ride);
-            return RedirectToAction("Index");
+               await _rideService.DeleteRideAsync(id);   
+               return RedirectToAction("Index");         
         }
     }
 }

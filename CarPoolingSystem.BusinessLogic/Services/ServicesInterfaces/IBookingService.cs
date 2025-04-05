@@ -12,8 +12,8 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces
     {
         Task<IEnumerable<BookingDetailsDTO>> GetAllBookingsAsync();
         Task<BookingDetailsDTO?> GetBookingByIdAsync(int id);
-        Task AddBookingAsync(CreateBookingDTO booking);
-        Task UpdateBookingAsync(UpdateBookingDTO booking);
-        Task DeleteBookingAsync(int id);
+        Task <bool> AddBookingAsync(CreateBookingDTO booking);
+        Task<int> UpdateBookingAsync(UpdateBookingDTO booking);
+        Task<bool> DeleteBookingAsync(int id);
     }
 }

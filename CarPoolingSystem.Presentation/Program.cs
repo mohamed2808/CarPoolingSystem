@@ -27,11 +27,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<CarPoolingSystemDbContext>()
     .AddDefaultTokenProviders();
 
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login"; // Redirects to the MVC login page
+    options.AccessDeniedPath = "/Account/AccessDenied"; // Redirects to the AccessDenied page
 });
+
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository,UserRepository>(); 
@@ -60,8 +61,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("RequireCustomerOrCraftsman", policy =>
-        policy.RequireRole("Customer", "Craftsman"));
+    options.AddPolicy("RequireCustomerOrDriver", policy =>
+        policy.RequireRole("Admin", "Driver"));
 });
 
 

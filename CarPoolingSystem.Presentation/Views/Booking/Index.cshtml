@@ -1,0 +1,98 @@
+﻿@model IEnumerable<CarPoolingSystem.Presentation.Models.BookingViewModel>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary">My Bookings</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Ride</th>
+                        <th>Driver</th>
+                        <th>Origin</th>
+                        <th>Destination</th>
+                        <th>Date & Time</th>
+                        <th>Seats Booked</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>@booking.RideId</td>
+                            <td>@booking.DriverName</td>
+                            <td>@booking.Origin</td>
+                            <td>@booking.Destination</td>
+                            <td>@booking.DateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@booking.SeatsBooked</td>
+                            <td>$@booking.Price</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteMode">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                        </tr>
+
+                        <div class="modal fade" id="deleteMode" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Delete Department</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are You Sure Delete Department</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form asp-action="Cancel" asp-route-id="@booking.Id">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h4 class="text-center mt-4 text-warning">No bookings found.</h4>
+    }
+</div>
+
+<!-- Cancel Modal -->
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var cancelModal = document.getElementById("cancelModal");
+
+            cancelModal.addEventListener("show.bs.modal", function (event) {
+                var button = event.relatedTarget; // The button that triggered the modal
+                var bookingId = button.getAttribute("data-id"); // Get booking ID
+
+                console.log("Booking ID Passed:", bookingId); // Debugging
+
+                // Set the bookingId to the hidden input field
+                if (bookingId) {
+                    document.getElementById("bookingId").value = bookingId; // Set hidden input value
+                } else {
+                    console.log("No booking ID found!");
+                }
+            });
+        });
+    </script>
+}

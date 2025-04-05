@@ -31,9 +31,11 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
             return booking.Adapt<BookingDetailsDTO>();
         }
 
-        public async Task AddBookingAsync(CreateBookingDTO bookingDto)
+        public async Task<bool> AddBookingAsync(CreateBookingDTO bookingDto)
         {
             var booking = bookingDto.Adapt<Booking>();
+            booking.CustomerId = 2;
+            booking.DirverId = 2;
             var validationResult = await _validator.ValidateAsync(booking);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
@@ -45,10 +47,13 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
                 throw new Exception("Not enough available seats.");
 
             ride.SeatsAvailable -= booking.SeatsBooked;
+            await _unitOfWork.Rides.UpdateAsync(ride);
             await _unitOfWork.Bookings.AddAsync(booking);
+            await _unitOfWork.SaveAsync();
+            return true;
         }
 
-        public async Task UpdateBookingAsync(UpdateBookingDTO bookingDto)
+        public async Task<int> UpdateBookingAsync(UpdateBookingDTO bookingDto)
         {
             var booking = bookingDto.Adapt<Booking>();
             if (booking.CustomerId <= 0) throw new ArgumentException("Invalid booking ID.");
@@ -61,9 +66,11 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
             if (existingBooking == null) throw new Exception("Booking not found.");
 
             await _unitOfWork.Bookings.UpdateAsync(booking);
+           return await _unitOfWork.SaveAsync() ;
+
         }
 
-        public async Task DeleteBookingAsync(int id)
+        public async Task<bool> DeleteBookingAsync(int id)
         {
             if (id <= 0) throw new ArgumentException("Invalid booking ID.");
 
@@ -71,6 +78,7 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
             if (booking == null) throw new Exception("Booking not found.");
 
             await _unitOfWork.Bookings.DeleteAsync(booking);
+            return true;
         }
     }
 }
