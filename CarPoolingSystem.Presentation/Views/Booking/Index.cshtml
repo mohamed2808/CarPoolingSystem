@@ -1,0 +1,81 @@
+﻿@model IEnumerable<CarPoolingSystem.Presentation.Models.BookingViewModel>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+<link href="~/css/stylesheet.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <div class="text-center">
+        <h2>My Bookings</h2>
+        <p>Review or manage your current ride bookings</p>
+    </div>
+
+    <div class="row mt-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var booking in Model)
+            {
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">@booking.Origin → @booking.Destination</h5>
+                            <p class="card-text">
+                                <strong>Date:</strong> @booking.DateTime.ToString("yyyy-MM-dd HH:mm") <br />
+                                <strong>Seats Booked:</strong> @booking.SeatsBooked <br />
+                                <strong>Total Price:</strong> @booking.Price.ToString("C")
+                            </p>
+
+                            <button type="button" class="btn btn-primary w-100 mt-2 viewBookingBtn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#bookingDetailsModal"
+                                    data-id="@booking.BookingId"
+                                    data-origin="@booking.Origin"
+                                    data-destination="@booking.Destination"
+                                    data-datetime="@booking.DateTime"
+                                    data-seats="@booking.SeatsBooked"
+                                    data-price="@booking.Price">
+                                Details
+                            </button>
+                            @await Html.PartialAsync("Partials/_BookingDetailsModal",booking)
+
+                            <button class="btn btn-warning w-100 mt-2 editBookingBtn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editBookingModal"
+                                    data-id="@booking.BookingId"
+                                    data-rideid="@booking.RideId"
+                                    data-driver="@booking.DriverName"
+                                    data-origin="@booking.Origin"
+                                    data-destination="@booking.Destination"
+                                    data-datetime="@booking.DateTime.ToString("yyyy-MM-ddTHH:mm")"
+                                    data-price="@booking.Price"
+                                    data-seats="@booking.SeatsBooked">
+                                Edit
+                            </button>
+                            @await Html.PartialAsync("Partials/_EditBookingModal",booking)
+                            <button type="button" class="btn btn-danger w-100 mt-2 deleteBookingBtn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteBookingModal"
+                                    data-id="@booking.BookingId"
+                                    data-origin="@booking.Origin"
+                                    data-destination="@booking.Destination">
+                                Delete
+                            </button>
+                            @await Html.PartialAsync("Partials/_DeleteBookingModal",booking)
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <h4>No bookings found.</h4>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/booking.js"></script>
+}

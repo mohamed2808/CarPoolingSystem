@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h2>Manage Users</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @foreach (var role in user.Roles)
+                    {
+                        <span class="badge badge-info">@role.Name</span>
+                    }
+                </td>
+                <td>
+                    <a href="@Url.Action("AssignRoles", "Admin", new { userId = user.Id })" class="btn btn-warning">Assign Roles</a>
+                    <a href="@Url.Action("Edit", "User", new { userId = user.Id })" class="btn btn-primary">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

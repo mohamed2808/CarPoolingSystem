@@ -1,0 +1,115 @@
+﻿@model CarPoolingSystem.Presentation.Models.RideSearchViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+<link href="~/css/stylesheet.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <div class="text-center">
+        <h2>Offer a Ride</h2>
+        <p>Have a car? Offer a ride and help others!</p>
+        <a href="@Url.Action("OfferRide", "Ride")" class="btn btn-success btn-lg">Create a Ride</a>
+    </div>
+
+    <div class="mt-4 mb-4">
+        <h2>Find a Ride</h2>
+        <form method="post" action="@Url.Action("Index", "Ride")" class="mb-4">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="From" name="Origin">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="To" name="Destination">
+                </div>
+                <div class="col-md-3">
+                    <input type="datetime-local" class="form-control" name="DateTime">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <a asp-action="Index" style="text-decoration: none;">
+            <h2 class="text-center">Recent Rides</h2>
+        </a>
+
+        <div class="row mt-4">
+            @if (Model.Rides != null && Model.Rides.Any())
+            {
+                foreach (var ride in Model.Rides)
+                {
+                    <div class="col-md-4 col-sm-6 mb-4">
+                        <div class="card ride-card shadow-lg">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">@ride.Origin → @ride.Destination</h5>
+                                <p class="card-text">
+                                    <strong>Seats Available:</strong> @ride.SeatsAvailable <br />
+                                    <strong>Departure:</strong> @ride.DateTime.ToString("yyyy-MM-dd HH:mm")
+                                </p>
+
+                                <button type="button" class="btn btn-success w-100 bookRideBtn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#bookRideModal"
+                                        data-id="@ride.Id"
+                                        data-origin="@ride.Origin"
+                                        data-destination="@ride.Destination"
+                                        data-datetime="@ride.DateTime.ToString("yyyy-MM-ddTHH:mm")"
+                                        data-seats="@ride.SeatsAvailable">
+                                    Book 
+                                </button>
+
+                                <button type="button" class="btn btn-primary w-100 mt-2 viewDetailsBtn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#detailsModal"
+                                        data-id="@ride.Id"
+                                        data-origin="@ride.Origin"
+                                        data-destination="@ride.Destination"
+                                        data-datetime="@ride.DateTime"
+                                        data-seats="@ride.SeatsAvailable"
+                                        data-price="@ride.Price">
+                                    Details
+                                </button>
+
+                                <button type="button" class="btn btn-warning w-100 mt-2 editRideBtn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editRideModal"
+                                        data-id="@ride.Id"
+                                        data-origin="@ride.Origin"
+                                        data-destination="@ride.Destination"
+                                        data-datetime="@ride.DateTime.ToString("yyyy-MM-ddTHH:mm")"
+                                        data-seats="@ride.SeatsAvailable"
+                                        data-price="@ride.Price">
+                                    Edit
+                                </button>
+
+                                <button type="button" class="btn btn-danger w-100 mt-2 deleteRideBtn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteRideModal"
+                                        data-id="@ride.Id"
+                                        data-origin="@ride.Origin"
+                                        data-destination="@ride.Destination">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h3 class="text-center">No rides found.</h3>
+            }
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("Partials/_BookRideModal", new CarPoolingSystem.Presentation.Models.BookingViewModel())
+@await Html.PartialAsync("Partials/_DetailsModal")
+@await Html.PartialAsync("Partials/_EditRideModal")
+@await Html.PartialAsync("Partials/_DeleteRideModal")
+
+@section Scripts {
+    <script src="~/js/ride.js"></script>
+}
