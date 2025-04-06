@@ -1,7 +1,7 @@
 ﻿@model CarPoolingSystem.BusinessLogic.Models.ApplicationUserDtos.RegisterDTO
-
 @{
     ViewBag.Title = "Register";
+    ViewBag.HideLayout = true;
 }
 
 <div class="container mt-5">
@@ -29,7 +29,6 @@
                     </select>
                 </div>
 
-                <!-- Vehicle Details for Drivers -->
                 <div id="vehicleDetails" style="display: none;">
                     <div class="mb-3">
                         <label class="form-label">Vehicle Make</label>
@@ -60,13 +59,11 @@
                 <button type="submit" class="btn btn-success w-100">Register</button>
             </form>
             <div class="text-center mt-3">
-                <a href="@Url.Action("Login", "Account")">Already have an account? Login</a>
+                <a href="@Url.Action("Login", "Account")" style="text-decoration: none;">Already have an account? Login</a>
             </div>
         </div>
     </div>
 </div>
 
 
-@section Scripts {
-    <script src="~/js/register.js"></script>
-}
+<script src="~/js/register.js"></script>

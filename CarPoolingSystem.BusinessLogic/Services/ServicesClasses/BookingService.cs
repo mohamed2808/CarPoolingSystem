@@ -34,8 +34,8 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
         public async Task<bool> AddBookingAsync(CreateBookingDTO bookingDto)
         {
             var booking = bookingDto.Adapt<Booking>();
-            booking.CustomerId = 2;
-            booking.DirverId = 2;
+            booking.CustomerId = 3;
+            booking.DirverId = 3;
             var validationResult = await _validator.ValidateAsync(booking);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);

@@ -43,7 +43,7 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
             ride.CreatedOn = DateTime.Now.AddMinutes(5);
             ride.CreatedBy = "Dirver";
             ride.LastModifiedBy = "Driver";
-            ride.DriverId = 2;
+            ride.DriverId = 3;
             var validationResult = await _validator.ValidateAsync(ride);
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);

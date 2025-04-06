@@ -1,16 +1,17 @@
 ﻿@model CarPoolingSystem.BusinessLogic.Models.ApplicationUserDtos.LoginDTO
 @{
     ViewBag.Title = "Login";
+    ViewBag.HideLayout = true;
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <h2 class="text-center">Login</h2>
+            <h2 class="text-center">Login In CarPooling</h2>
             <form method="post" action="@Url.Action("Login", "Account")">
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" name="Email" required>
+                    <input type="email" class="form-control" name="Email" value="@Model?.Email" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Password</label>
@@ -22,9 +23,14 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger mt-3">Invalid login attempt.</div>
+            }
+
             <div class="text-center mt-3">
-                <a href="#">Forgot Password?</a> |
-                <a href="@Url.Action("Register", "Account")">Register</a>
+                <a style="text-decoration: none;">Forgot Password?</a> |
+                <a href="@Url.Action("Register", "Account")" style="text-decoration: none;">Register</a>
             </div>
         </div>
     </div>

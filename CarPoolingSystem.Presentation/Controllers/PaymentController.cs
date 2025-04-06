@@ -1,10 +1,12 @@
 ﻿using CarPoolingSystem.BusinessLogic.Models.PaymentDtos;
 using CarPoolingSystem.BusinessLogic.Services.ServicesInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace CarPoolingSystem.Presentation.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;

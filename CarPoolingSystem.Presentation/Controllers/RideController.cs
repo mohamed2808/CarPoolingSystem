@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarPoolingSystem.Presentation.Controllers
 {
+    [Authorize(Roles = "Admin,Driver")]
     public class RideController : Controller
     {
         private readonly IRideService _rideService;
@@ -55,7 +56,7 @@ namespace CarPoolingSystem.Presentation.Controllers
             await _rideService.AddRideAsync(ride);
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = "Admin,Driver")]
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateRideDTO ride)
         {
@@ -66,6 +67,7 @@ namespace CarPoolingSystem.Presentation.Controllers
             }
             return View(ride);
         }
+        [Authorize(Roles = "Admin,Driver")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

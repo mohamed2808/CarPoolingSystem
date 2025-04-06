@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using CarPoolingSystem.BusinessLogic.Models.RideDtos;
 
 namespace CarPoolingSystem.Presentation.Controllers;
-
+[Authorize(Roles = "Admin,Driver")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

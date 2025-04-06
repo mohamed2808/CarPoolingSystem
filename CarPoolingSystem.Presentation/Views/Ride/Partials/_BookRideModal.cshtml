@@ -11,26 +11,42 @@
                 <form method="post" action="@Url.Action("Create", "Booking")">
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="rideId" name="RideId" />
+
+                   
                     <div class="mb-3">
                         <label>From:</label>
                         <input type="text" class="form-control" id="rideOrigin" readonly />
+                        @Html.ValidationMessageFor(m => m.Origin, "", new { @class = "text-danger" })
                     </div>
+
+                    
                     <div class="mb-3">
                         <label>To:</label>
                         <input type="text" class="form-control" id="rideDestination" readonly />
+                        @Html.ValidationMessageFor(m => m.Destination, "", new { @class = "text-danger" })
                     </div>
+
+                    
                     <div class="mb-3">
                         <label>Departure Time:</label>
                         <input type="text" class="form-control" id="rideDateTime" readonly />
+                        @Html.ValidationMessageFor(m => m.DateTime, "", new { @class = "text-danger" })
                     </div>
+
+                    
                     <div class="mb-3">
                         <label>Available Seats:</label>
                         <input type="number" class="form-control" id="rideSeats" readonly />
+                        @Html.ValidationMessageFor(m => m.SeatsBooked, "", new { @class = "text-danger" })
                     </div>
+
+                    
                     <div class="mb-3">
                         <label>Select Seats:</label>
-                        <input type="number" class="form-control" name="SeatsBooked" required min="1" />
+                        <input type="number" class="form-control" name="SeatsBooked" required min="1" value="@Model.SeatsBooked" />
+                        @Html.ValidationMessageFor(m => m.SeatsBooked, "", new { @class = "text-danger" })
                     </div>
+
                     <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
                 </form>
             </div>
