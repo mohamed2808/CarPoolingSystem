@@ -75,4 +75,14 @@ img {
     height: auto;
     max-width: 100%;
 }
-
+.modal-backdrop-blur {
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.4); 
+    z-index: 1040; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transition: all 0.3s ease-in-out;
+}

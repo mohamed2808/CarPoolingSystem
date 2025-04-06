@@ -49,6 +49,7 @@ namespace CarPoolingSystem.BusinessLogic.Services.ServicesClasses
                 throw new ValidationException(validationResult.Errors);
 
             await _unitOfWork.Rides.AddAsync(ride);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task UpdateRideAsync(UpdateRideDTO rideDto)

@@ -1,0 +1,21 @@
+﻿<div class="modal fade" id="deleteRideModal" tabindex="-1" aria-labelledby="deleteRideModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Ride</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this ride?</p>
+                <p><strong>Origin:</strong> <span id="deleteRideOrigin"></span></p>
+                <p><strong>Destination:</strong> <span id="deleteRideDestination"></span></p>
+
+                <form method="post" action="@Url.Action("Delete", "Ride")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="deleteRideId" name="id" />
+                    <button type="submit" class="btn btn-danger w-100">Delete Ride</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
